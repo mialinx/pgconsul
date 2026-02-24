@@ -808,7 +808,9 @@ class pgconsul(object):
                             stream_from,
                         )
             self.start_pooler()
-            self.db.ensure_restoring_wal()
+            if self.config.getboolean('replica', 'primary_switch_disable_archive_restore'):
+                if zk_state.get(self.zk.SWITCHOVER_STATE_PATH) is None:
+                    self.db.ensure_restoring_wal()
             self._reset_simple_primary_switch_try()
             self._handle_slots()
         except Exception:
@@ -989,7 +991,10 @@ class pgconsul(object):
 
             logging.debug('ACTION. Ensuring WAL replaying from {}'.format(holder))
             self.db.ensure_replaying_wal()
-            self.db.ensure_restoring_wal()
+
+            if self.config.getboolean('replica', 'primary_switch_disable_archive_restore'):
+                if zk_state.get(self.zk.SWITCHOVER_STATE_PATH) is None:
+                    self.db.ensure_restoring_wal()
 
             if not streaming:
                 logging.warning('Seems that we are not really streaming WAL from %s.', holder)
