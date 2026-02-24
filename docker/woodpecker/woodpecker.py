@@ -23,7 +23,7 @@ def main():
     # to connect only to the current master (libpq will try hosts until it finds one)
     conninfo = (
         f"host={hosts} port={port} dbname={database} user={user} "
-        f"password={password} target_session_attrs=primary connect_timeout=5"
+        f"password={password} target_session_attrs=primary connect_timeout=1"
     )
 
     conn = None

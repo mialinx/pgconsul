@@ -340,7 +340,6 @@ def step_container_with_config(context, cont_type, name):
 
     if cont_type == 'pgconsul':
         container.exec_run("/usr/local/bin/generate_certs.sh")
-        container.exec_run("/usr/local/bin/supervisorctl restart zookeeper")
         container.exec_run("/usr/local/bin/supervisorctl restart pgconsul")
     elif cont_type == 'zookeeper':
         container.exec_run("/usr/local/bin/generate_certs.sh")
